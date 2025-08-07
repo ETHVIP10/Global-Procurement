@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ethereum 10th Anniversary - MetaMask High Price Recycling</title>
+<style>
+  /* Reset & base */
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
+  body, html {
+    height: 100%; width: 100%; overflow-x: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #b3f59f;
+    background: #001a00;
+    position: relative;
+  }
+  #canvas-bg {
+    position: fixed;
+    top:0; left:0;
+    width: 100vw; height: 100vh;
+    z-index: -1;
+  }
+  header {
+    position: fixed;
+    top: 16px; right: 20px;
+    z-index: 10;
+  }
+  select#lang-select {
+    background: rgba(0,50,0,0.7);
+    border: none;
+    color: #b3f59f;
+    font-weight: 600;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  main {
+    max-width: 900px;
+    margin: 80px auto 40px;
+    padding: 0 20px;
+    text-align: center;
+    line-height: 1.5;
+  }
+  h1 {
+    font-size: 2.4rem;
+    margin-bottom: 12px;
+    font-weight: 700;
+    text-shadow: 0 0 8px #00ff00aa;
+  }
+  p.lead {
+    font-size: 1.3rem;
+    margin-bottom: 28px;
+  }
+  section.profit {
+    background: rgba(0,50,0,0.7);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 32px auto 48px;
+    max-width: 600px;
+    box-shadow: 0 0 20px #0f0;
+  }
+  table {
+    width: 100%;
+    color: #b3f59f;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 12px 8px;
+    border-bottom: 1px solid #0a360a;
+    font-weight: 600;
+  }
+  th {
+    font-size: 1.1rem;
+    background: rgba(0,100,0,0.5);
+  }
+  button.telegram-btn {
+    background-color: #28a745;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    padding: 14px 28px;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 0 12px #28a745bb;
+    transition: background-color 0.3s ease;
+    margin-bottom: 40px;
+  }
+  button.telegram-btn:hover {
+    background-color: #1e7e34;
+  }
+  /* Responsive */
+  @media (max-width: 600px) {
+    h1 { font-size: 1.8rem; }
+    p.lead { font-size: 1rem; }
+    section.profit {
+      padding: 16px;
+      margin: 24px auto 32px;
+    }
+    th, td {
+      padding: 10px 6px;
+      font-size: 0.9rem;
+    }
+    button.telegram-btn {
+      font-size: 1rem;
+      padding: 12px 24px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="canvas-bg"></canvas>
+
+<header>
+  <select id="lang-select" aria-label="Select Language">
+    <option value="en">English</option>
+    <option value="de">Deutsch</option>
+    <option value="it">Italiano</option>
+    <option value="fr-ca">Français (Canada)</option>
+    <option value="en-au">English (Australia)</option>
+    <option value="es">Español</option>
+    <option value="ja">日本語</option>
+    <option value="hi">हिन्दी</option>
+    <option value="tr">Türkçe</option>
+    <option value="ko">한국어</option>
+    <option value="ru">Русский</option>
+    <option value="th">ไทย</option>
+    <option value="zh-tw">繁體中文</option>
+    <option value="pt">Português</option>
+    <option value="vi">Tiếng Việt</option>
+  </select>
+</header>
+
+<main>
+  <h1 id="title"></h1>
+  <p class="lead" id="subtitle1"></p>
+  <p class="lead" id="subtitle2"></p>
+  <p class="lead" id="subtitle3"></p>
+  <p class="lead" id="subtitle4"></p>
+  <p class="lead" id="subtitle5"></p>
+
+  <section id="steps">
+    <h2 id="steps-title"></h2>
+    <ol id="steps-list"></ol>
+  </section>
+
+  <section class="profit">
+    <h2 id="profit-title"></h2>
+    <table aria-label="Profit Table">
+      <thead>
+        <tr>
+          <th id="table-col1"></th>
+          <th id="table-col2"></th>
+        </tr>
+      </thead>
+      <tbody id="profit-rows">
+        <!-- 动态插入 -->
+      </tbody>
+    </table>
+  </section>
+
+  <button class="telegram-btn" id="telegram-btn" aria-label="Join Telegram">Telegram</button>
+</main>
+
+<script>
+  // 多语言文案
+  const texts = {
+    en: {
+      title: "Ethereum 10th Anniversary — A Decade of Decentralization.",
+      subtitle1: "From $0.31 to a $500B Global Market — ETH Changed the World.",
+      subtitle2: "10 Years Strong — The Ethereum Revolution Continues.",
+      subtitle3: "Celebrate a Decade of Ethereum — Build, Own, Thrive.",
+      subtitle4: "Join the Ethereum 10-Year Legacy — The Future is On-Chain.",
+      subtitle5: "Your ETH Deserves More — Trade for the Highest Price!",
+      stepsTitle: "How to Participate",
+      stepsList: [
+        "Open your mobile app store and download MetaMask wallet.",
+        "Sign up and create your own MetaMask wallet.",
+        "Purchase your own ETH in MetaMask."
+      ],
+      profitTitle: "High Price Buyback Profit Rates",
+      tableCol1: "ETH Quantity",
+      tableCol2: "Profit Percentage",
+      profitRows: [
+        ["1 to 5 ETH", "10% profit"],
+        ["10 to 50 ETH", "20% profit"],
+        ["100 to 500 ETH", "30% profit"],
+        ["1000 to 5000 ETH", "40% profit"],
+        ["10000 to 50000 ETH", "50% profit"]
+      ],
+      telegramBtn: "Join Telegram",
+      telegramLink: "https://t.me/ETHVIP999"
+    },
+    de: {
+      title: "Ethereum 10. Jahrestag — Ein Jahrzehnt der Dezentralisierung.",
+      subtitle1: "Von $0,31 zu einem 500-Milliarden-Dollar-Markt — ETH hat die Welt verändert.",
+      subtitle2: "10 Jahre stark — Die Ethereum-Revolution geht weiter.",
+      subtitle3: "Feiern Sie ein Jahrzehnt Ethereum — Bauen, Besitzen, Gedeihen.",
+      subtitle4: "Treten Sie dem 10-jährigen Ethereum-Erbe bei — Die Zukunft ist On-Chain.",
+      subtitle5: "Ihr ETH verdient mehr — Handeln Sie zum besten Preis!",
+      stepsTitle: "So machen Sie mit",
+      stepsList: [
+        "Öffnen Sie Ihren mobilen App-Store und laden Sie die MetaMask-Wallet herunter.",
+        "Melden Sie sich an und erstellen Sie Ihre eigene MetaMask-Wallet.",
+        "Kaufen Sie Ihr eigenes ETH in MetaMask."
+      ],
+      profitTitle: "Hohe Rückkaufgewinne",
+      tableCol1: "ETH Menge",
+      tableCol2: "Gewinnprozentsatz",
+      profitRows: [
+        ["1 bis 5 ETH", "10% Gewinn"],
+        ["10 bis 50 ETH", "20% Gewinn"],
+        ["100 bis 500 ETH", "30% Gewinn"],
+        ["1000 bis 5000 ETH", "40% Gewinn"],
+        ["10000 bis 50000 ETH", "50% Gewinn"]
+      ],
+      telegramBtn: "Telegram beitreten",
+      telegramLink: "https://t.me/ETHVIP999"
+    },
+    it: {
+      title: "10º Anniversario di Ethereum — Un decennio di decentralizzazione.",
+      subtitle1: "Da $0,31 a un mercato globale da 500 miliardi di dollari — ETH ha cambiato il mondo.",
+      subtitle2: "10 anni di forza — La rivoluzione di Ethereum continua.",
+      subtitle3: "Celebra un decennio di Ethereum — Costruisci, Possiedi, Prosperi.",
+      subtitle4: "Unisciti all'eredità di 10 anni di Ethereum — Il futuro è On-Chain.",
+      subtitle5: "Il tuo ETH merita di più — Scambia al prezzo più alto!",
+      stepsTitle: "Come partecipare",
+      stepsList: [
+        "Apri il negozio di app del tuo cellulare e scarica il wallet MetaMask.",
+        "Iscriviti e crea il tuo wallet MetaMask.",
+        "Acquista il tuo ETH su MetaMask."
+      ],
+      profitTitle: "Alti profitti di riacquisto",
+      tableCol1: "Quantità ETH",
+      tableCol2: "Percentuale di profitto",
+      profitRows: [
+        ["1 a 5 ETH", "10% di profitto"],
+        ["10 a 50 ETH", "20% di profitto"],
+        ["100 a 500 ETH", "30% di profitto"],
+        ["1000 a 5000 ETH", "40% di profitto"],
+        ["10000 a 50000 ETH", "50% di profitto"]
+      ],
+      telegramBtn: "Unisciti a Telegram",
+      telegramLink: "https://t.me/ETHVIP999"
+    },
+    "fr-ca": {
+      title: "10e anniversaire d'Ethereum — Une décennie de décentralisation.",
+      subtitle1: "De 0,31 $ à un marché mondial de 500 milliards de dollars — ETH a changé le monde.",
+      subtitle2: "10 ans de force — La révolution Ethereum continue.",
+      subtitle3: "Célébrez une décennie d'Ethereum — Construisez, Possédez, Prospérez.",
+      subtitle4: "Rejoignez l'héritage de 10 ans d'Ethereum — L'avenir est On-Chain.",
+      subtitle5: "Votre ETH mérite plus — Échangez au meilleur prix !",
+      stepsTitle: "Comment participer",
+      stepsList: [
+        "Ouvrez le magasin d'applications mobile et téléchargez le portefeuille MetaMask.",
+        "Inscrivez-vous et créez votre propre portefeuille MetaMask.",
+        "Achetez votre propre ETH dans MetaMask."
+      ],
+      profitTitle: "Taux de profit élevé de rachat",
+      tableCol1: "Quantité ETH",
+      tableCol2: "Pourcentage de profit",
+      profitRows: [
+        ["1 à 5 ETH", "10 % de profit"],
+        ["10 à 50 ETH", "20 % de profit"],
+        ["100 à 500 ETH", "30 % de profit"],
+        ["1000 à 5000 ETH", "40 % de profit"],
+        ["10000 à 50000 ETH", "50 % de profit"]
+      ],
+      telegramBtn: "Rejoindre Telegram",
+      telegramLink: "https://t.me/ETHVIP999"
+    },
+    "en-au": {
+      title: "Ethereum 10th Anniversary — A Decade of Decentralisation.",
+      subtitle1: "From $0.31 to a $500B Global Market — ETH Changed the World.",
+      subtitle2: "10 Years Strong — The Ethereum Revolution Continues.",
+      subtitle3: "Celebrate a Decade of Ethereum — Build, Own, Thrive.",
+      subtitle4: "Join the Ethereum 10-Year Legacy — The Future is On-Chain.",
+      subtitle5: "Your ETH Deserves More — Trade for the Highest Price!",
+      stepsTitle: "How to Participate",
+      stepsList: [
+        "Open your mobile app store and download MetaMask wallet.",
+        "Sign up and create your own MetaMask wallet.",
+        "Purchase your own ETH in MetaMask."
+      ],
+      profitTitle: "High Price Buyback Profit Rates",
+      tableCol1: "ETH Quantity",
+      tableCol2: "Profit Percentage",
+      profitRows: [
+        ["1 to 5 ETH", "10% profit"],
+        ["10 to 50 ETH", "20% profit"],
+        ["100 to 500 ETH", "30% profit"],
+        ["1000 to 5000 ETH", "40% profit"],
+        ["10000 to 50000 ETH", "50% profit"]
+      ],
+      telegramBtn: "Join Telegram",
+      telegramLink: "https://t.me/ETHVIP999"
+    },
+    es: {
+      title: "10º Aniversario de Ethereum — Una Década de Descentralización.",
+      subtitle1: "De $0.31 a un Mercado Global de $500B — ETH Cambió el Mundo.",
+      subtitle2: "10 Años Fuertes — La Revolución de Ethereum Continúa.",
+      subtitle3: "Celebra una Década de Ethereum — Construye, Posee, Prosperar.",
+      subtitle4: "Únete al Legado de 10 Años de Ethereum — El Futuro Está On-Chain.",
+      subtitle5: "¡Tu ETH Merece Más — Intercambia al Precio Más Alto!",
+      stepsTitle: "Cómo Participar",
+      stepsList: [
+        "Abre la tienda de aplicaciones de tu móvil y descarga la billetera MetaMask.",
+        "Regístrate y crea tu propia billetera MetaMask.",
+        "Compra tu propio ETH en MetaMask."
+      ],
+      profitTitle: "Altas Tasas de Ganancias por Recompra",
+      tableCol1: "Cantidad de ETH",
+      tableCol2: "Porcentaje de Ganancia",
+      profitRows: [
+        ["1 a 5 ETH", "10% de ganancia"],
+        ["10 a 50 ETH", "20% de ganancia"],
+        ["100 a 500 ETH", "30% de ganancia"],
+        ["1000 a 5000 ETH", "40% de ganancia"],
+        ["10000 a 50000 ETH", "50% de ganancia"]
+      ],
+      telegramBtn: "Unirse a Telegram",
+      telegramLink: "https://t.me/ETHVIP999"
+    },
+    ja: {
+      title: "イーサリアム10周年記念 — 分散化の10年。",
+      subtitle1: "$0.31から5000億ドルのグローバル市場へ — ETHが世界を変えた。",
+      subtitle2: "10年間の強さ — イーサリアム革命は続く。",
+      subtitle3: "イーサリアムの10年を祝おう — 創り、所有し、繁栄しよう。",
+      subtitle4: "イーサリアム10年の遺産に参加しよう — 未来はオンチェーン。",
+      subtitle5: "あなたのETHはもっと価値がある — 最高価格で取引しよう！",
+      stepsTitle: "参加方法",
+      stepsList: [
+        "モバイルアプリストアを開き、MetaMaskウォレットをダウンロードしてください。",
+        "登録して自分のMetaMaskウォレットを作成してください。",
+        "MetaMaskでETHを購入してください。"
+      ],
+      profitTitle: "高価買い取り利益率",
+      tableCol1: "ETH数量",
+      tableCol2: "利益率",
+      profitRows: [
+        ["1〜5 ETH", "10％の利益"],
+        ["10〜50 ETH", "20％の利益"],
+        ["100〜500 ETH", "30％の利益"],
+        ["1000〜5000 ETH", "40％の利益"],
+        ["10000〜50000 ETH", "50％の利益"]
+      ],
+      telegramBtn: "テレグラムに参加",
+      telegramLink: "https://t.me/ETHVIP999"
+    },
+    hi: {
+      title: "एथेरियम 10 वां वार्षिक उत्सव — विकेंद्रीकरण का दशक।",
+      subtitle1: "$0.31 से $500B वैश्विक बाजार तक — ETH ने दुनिया को बदल दिया।",
+      subtitle2: "10 साल मजबूत — एथेरियम क्रांति जारी है।",
+      subtitle3: "एथेरियम के एक दशक का जश्न मनाएं — बनाएं, रखें, फलें-फूलें।",
+      subtitle4: "एथेरियम 10-वर्षीय विरासत में शामिल हों — भविष्य ऑन-चेन है।",
+      subtitle5: "आपका ETH अधिक के योग्य है — उच्चतम कीमत पर व्यापार करें!",
+      stepsTitle: "कैसे भाग लें",
+      stepsList: [
+        "अपने मोबाइल ऐप स्टोर को खोलें और MetaMask वॉलेट डाउनलोड करें।",
+        "साइन अप करें और अपना खुद का MetaMask वॉलेट बनाएं।",
+        "MetaMask में अपना ETH खरीदें।"
+      ],
+      profitTitle: "उच्च मूल्य पुनर्खरीद लाभ दरें",
+      tableCol1: "ETH मात्रा",
+      tableCol2: "लाभ प्रतिशत",
+      profitRows: [
+        ["1 से 5 ETH", "10% लाभ"],
+        ["10 से 50 ETH", "20% लाभ"],
+        ["100 से 500 ETH", "30% लाभ"],
+        ["1000 से 5000 ETH", "40% लाभ"],
+        ["10000 से 50000 ETH", "50% लाभ"]
+      ],
+      telegramBtn: "टेलीग
